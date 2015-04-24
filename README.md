@@ -90,3 +90,19 @@ two seconds after that at :59.  Finally, "tcpkatest" prints:
     2015-04-23T23:10:01Z: tcpkatest: read: Connection timed out
 
 which is exactly two seconds after the last probe was sent.
+
+
+# Node.js
+
+There's a similar Node.js program in this repo that you can use to test in a
+similar way.
+
+There are a few issues that affect Node programs trying to use TCP KeepAlive:
+
+* It's not possible to configure `TCP_KEEPCNT` and `TCP_KEEPINTVL`. (Node issue
+  [#4109](https://github.com/joyent/node/issues/4109).)  As a result, you're
+  left with the system defaults for these.
+* Because of issue [#21079](https://github.com/joyent/node/issues/21079), you
+  should only call setKeepAlive after the socket is connected.
+* Because of issue [#21080](https://github.com/joyent/node/issues/21080), you
+  want to be sure your value for the timeout is supported on your system.
